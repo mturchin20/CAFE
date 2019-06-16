@@ -25,6 +25,8 @@ R -q -e "library(\"workflowr\"); wflow_build();"
 #20190321
 #Vs1
 
+#Idea -- SNPs undergoing drift should randomly fluctuate to both higher and lower frequencies 'equally' (modulo population demographic misc) from their ancestral state over time. SNPs undergoing weak selective pressures in a given direction should experience less overall variance in their change in frequency since their ancestral state (alleles that are favored get pushed up; if you don't know orientation properly, can just use absolute difference since amount pushed up or amount pushed down are equivalent; looking at overall standard difference amongst 'AF change since ancestral state'; AF affects how much has changed since ancestral, but will be doing matched permutations on ancestral AF so within the final score, that's fine; the idea is that all alleles have similar changes in AF since ancestral state when they're being weakly selected, so they are more similar than random chance alone given a normal distribution variance)
+
 mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE
 mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1
 mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses
@@ -80,7 +82,7 @@ mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1
 
 #NOTE -- all 1000G files are on the same strand, and since pop subsets were extracted from the main source AllPops files, they should all start with the same set of SNPs at least (read: http://www.internationalgenome.org/faq/what-strand-are-variants-your-vcf-file/)
 
-for chr1 in `echo {1..22}`; do
+for chr1 in `echo {1..1}`; do
 	echo $chr1
 
 #	join <(zcat /users/mturchin/data/1000G/subsets/CEU/AFs/CEU.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) <(zcat /users/mturchin/data/1000G/subsets/GBR/AFs/GBR.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) | perl -lane 'if ($F[1] eq "0") { if ($F[4] eq "0") { if ($F[2] eq $F[5]) { print join("\t", @F); } } else { if ($F[2] eq $F[5]) { print join("\t", @F); } elsif ($F[2] eq $F[4]) { ($F[4], $F[5]) = ($F[5], $F[4]); $F[6] = 1 - $F[6]; print join("\t", @F); } else { $PH1 = 1; } } } else { if ($F[4] eq "0") { if ($F[1] eq $F[5]) { ($F[4], $F[5]) = ($F[5], $F[4]); $F[6] = 1 - $F[6]; print join("\t", @F); } elsif ($F[2] eq $F[5]) { print join("\t", @F); } else { $PH1 = 1; } } else { if (($F[1] eq $F[4]) && ($F[2] eq $F[5])) { print join("\t", @F); } elsif (($F[1] eq $F[5]) && ($F[2] eq $F[4])) { ($F[4], $F[5]) = ($F[5], $F[4]); $F[6] = 1 - $F[6]; print join("\t", @F); } else { $PH1 = 1; } } }' | \ 
@@ -89,7 +91,18 @@ for chr1 in `echo {1..22}`; do
 #	join - <(zcat /users/mturchin/data/1000G/subsets/YRI/AFs/YRI.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) | perl -lane 'if ($F[1] eq "0") { if ($F[13] eq "0") { if ($F[2] eq $F[14]) { print join("\t", @F); } } else { if ($F[2] eq $F[14]) { print join("\t", @F); } elsif ($F[2] eq $F[13]) { ($F[13], $F[14]) = ($F[14], $F[13]); $F[15] = 1 - $F[15]; print join("\t", @F); } else { $PH1 = 1; } } } else { if ($F[13] eq "0") { if ($F[1] eq $F[14]) { ($F[13], $F[14]) = ($F[14], $F[13]); $F[15] = 1 - $F[15]; print join("\t", @F); } elsif ($F[2] eq $F[14]) { print join("\t", @F); } else { $PH1 = 1; } } else { if (($F[1] eq $F[13]) && ($F[2] eq $F[14])) { print join("\t", @F); } elsif (($F[1] eq $F[14]) && ($F[2] eq $F[13])) { ($F[13], $F[14]) = ($F[14], $F[13]); $F[15] = 1 - $F[15]; print join("\t", @F); } else { $PH1 = 1; } } }' | \ 
 #	join - <(zcat /users/mturchin/data/1000G/subsets/ESN/AFs/ESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) | perl -lane 'if ($F[1] eq "0") { if ($F[16] eq "0") { if ($F[2] eq $F[17]) { print join("\t", @F); } } else { if ($F[2] eq $F[17]) { print join("\t", @F); } elsif ($F[2] eq $F[16]) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } else { $PH1 = 1; } } } else { if ($F[16] eq "0") { if ($F[1] eq $F[17]) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } elsif ($F[2] eq $F[17]) { print join("\t", @F); } else { $PH1 = 1; } } else { if (($F[1] eq $F[16]) && ($F[2] eq $F[17])) { print join("\t", @F); } elsif (($F[1] eq $F[17]) && ($F[2] eq $F[16])) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } else { $PH1 = 1; } } }' | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz
 #	zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if (($4 > 0) && ($7 > 0) && ($10 > 0) && ($13 > 0)) { print $0 } } ' | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz
-	zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | R -q -e "Data1 <- read.table(file('stdin'), header=T); EurMean <- apply(Data1[,c(4,7,10,13)], 2, function(x) { return(mean(x)); }); CEUDiff <- abs(Data1[,4] - EurMean); GBRDiff <- abs(Data1[,7] - EurMean); TSIDiff <- abs(Data1[,10] - EurMean); IBSDiff <- abs(Data1[,13] - EurMean); write.table(cbind(Data1[,c(1,2,3,4,7,10,13)], c(EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff)), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz
+	zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | R -q -e "Data1 <- read.table(file('stdin'), header=T); EurMean <- apply(Data1[,c(4,7,10,13)], 1, function(x) { return(mean(x)); }); CEUDiff <- abs(Data1[,4] - EurMean); GBRDiff <- abs(Data1[,7] - EurMean); TSIDiff <- abs(Data1[,10] - EurMean); IBSDiff <- abs(Data1[,13] - EurMean); write.table(cbind(Data1[,c(1,2,3,4,7,10,13)], EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz
+
+done
+
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles
+
+for chr1 in `echo {1..1}`; do
+	echo $chr1
+
+	rm -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/* 
+
+	zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); for (i in 1:nrow(Data1)) { AncAF <- round(Data1[i,8], digits=2); write.table(Data1[i,], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_\", gsub(\"\\\\.\", \"_\", as.character(AncAF)), \".frq\", sep=\"\"), append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE);};"
 
 done
 	
@@ -100,7 +113,10 @@ rs1000070       T       C       0.2828  T       C       0.3626  T       C       
 rs1000072       0       G       0       0       G       0       0       G       0       0       G       0       0       G       0       0       G       0
 rs1000073       A       G       0.3283  A       G       0.4396  A       G       0.4953  A       G       0.4019  A       G       0.5741  A       G       0.6061
 
-
+     write.table(x, file = "", append = FALSE, quote = TRUE, sep = " ",
+                 eol = "\n", na = "NA", dec = ".", row.names = TRUE,
+                 col.names = TRUE, qmethod = c("escape", "double"),
+                 fileEncoding = "")
 
 
 
@@ -130,6 +146,34 @@ rs1000184       C       G       0.2879  C       G       0.2253
 6196152 37176912 316003752
 [  mturchin@node1303  ~/LabMisc/RamachandranLab/InterPath/CAFE]$zcat /users/mturchin/data/1000G/subsets/GBR/AFs/GBR.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | wc
 6196152 37176912 316003752
+#20190616
+[  mturchin@node1137  ~/LabMisc/RamachandranLab/InterPath/CAFE]$       zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | R -q -e "Data1 <- read.table(file('stdin'), header=T); EurMean <- apply(Data1[,c(4,7,10,13)], 1, function(x) { return(mean(x)); }); CEUDiff <- abs(Data1[,4] - EurMean); GBRDiff <- abs(Data1[,7] - EurMean); TSIDiff <- abs(Data1[,10] - EurMean); IBSDiff <- abs(Data1[,13] - EurMean); write.table(cbind(Data1[,c(1,2,3,4,7,10,13)], EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz
+[  mturchin@node1137  ~/LabMisc/RamachandranLab/InterPath/CAFE]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | head -n 10
+rs1000033 G T 0.2071 0.2033 0.1682 0.1589 0.184375 0.022725 0.018925 0.016175 0.025475
+rs1000050 C T 0.1364 0.1429 0.1449 0.215 0.1598 0.0234 0.0169 0.0149 0.0552
+rs1000070 T C 0.2828 0.3626 0.3224 0.3178 0.3214 0.0386 0.0412 0.001 0.00359999999999999
+rs1000073 A G 0.3283 0.4396 0.4953 0.4019 0.416275 0.087975 0.023325 0.079025 0.014375
+rs1000075 T C 0.3586 0.2473 0.3458 0.3131 0.3162 0.0424 0.0689 0.0296 0.00309999999999999
+rs1000085 C G 0.2121 0.2308 0.1869 0.2196 0.21235 0.00025 0.01845 0.02545 0.00724999999999998
+rs1000127 C T 0.3081 0.2967 0.2664 0.2991 0.292575 0.015525 0.00412499999999999 0.026175 0.00652499999999995
+rs1000184 C G 0.2879 0.2253 0.1776 0.229 0.22995 0.05795 0.00464999999999999 0.05235 0.000949999999999979
+rs1000282 C T 0.197 0.2363 0.1916 0.2009 0.20645 0.00944999999999999 0.02985 0.01485 0.00555
+rs1000283 A G 0.197 0.2363 0.1916 0.2009 0.20645 0.00944999999999999 0.02985 0.01485 0.00555
+[  mturchin@node1137  ~/LabMisc/RamachandranLab/InterPath/CAFE]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | wc        
+ 668049 8016588 64007801
+[  mturchin@node1137  ~/LabMisc/RamachandranLab/InterPath/CAFE]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | wc
+ 668050 12692950 50935772
+[  mturchin@node1137  ~/LabMisc/RamachandranLab/InterPath/CAFE]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | head -n 10
+SNP     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF
+rs1000033       G       T       0.2071  G       T       0.2033  G       T       0.1682  G       T       0.1589  G       T       0.3843  G       T       0.4293
+rs1000050       C       T       0.1364  C       T       0.1429  C       T       0.1449  C       T       0.215   C       T       0.625   C       T       0.6616
+rs1000070       T       C       0.2828  T       C       0.3626  T       C       0.3224  T       C       0.3178  T       C       0.6528  T       C       0.6313
+rs1000073       A       G       0.3283  A       G       0.4396  A       G       0.4953  A       G       0.4019  A       G       0.5741  A       G       0.6061
+rs1000075       T       C       0.3586  T       C       0.2473  T       C       0.3458  T       C       0.3131  T       C       0.2685  T       C       0.3232
+rs1000085       C       G       0.2121  C       G       0.2308  C       G       0.1869  C       G       0.2196  C       G       0.01389 C       G       0.07576
+rs1000127       C       T       0.3081  C       T       0.2967  C       T       0.2664  C       T       0.2991  C       T       0.1852  C       T       0.1566
+rs1000184       C       G       0.2879  C       G       0.2253  C       G       0.1776  C       G       0.229   C       G       0.00463 0       G       0
+rs1000282       C       T       0.197   C       T       0.2363  C       T       0.1916  C       T       0.2009  C       T       0.1667  C       T       0.1364
 
 
 ~~~
