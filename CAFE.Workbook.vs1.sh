@@ -126,8 +126,9 @@ ln -s /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_Hap
 for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 	for j in `cat <(echo "Height" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 		for k in `cat <(echo "lt5eNeg9 lt1eNeg4 lt5eNeg8" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
-		echo $i $k $k
-		
+			echo $i $j $k
+
+			join <(zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
 
 		done
 	done
