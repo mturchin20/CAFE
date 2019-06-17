@@ -150,13 +150,15 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
 				mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1
 			fi
 
+			rm -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/*
 			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/$iVal1.$jVal1.$kVal1.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); \
-			for (i in 1:nrow(Data1)) { \
-				AncAF <- round(as.numeric(as.character(Data1[i,8])), digits=2); Data2 <- c(); for (j in c(-.01,0,.01)) { Filename3 <- paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_\", as.character(AncAF + j), \".frq.gz\", sep=\"\"); if (file.exists(Filename3)) { Data3 <- read.table(Filename3, header=F); Data2 <- cbind(Data2, Data3); }; }; \ 
-				set.seed(as.numeric(as.character($TotalSeed1))+i); RowVals1 <- sample(1:nrow(Data3)); for (k in 1:1000) { \
-						write.table(Data3[RowVals1[k],], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm\", as.character(k), \".txt\", sep=\"\"), append=TRUE, row.names=FALSE, col.names=FALSE); \
+			for (i in 1:10) { print(i); \
+				AncAF <- round(as.numeric(as.character(Data1[i,8])), digits=2); Data2 <- c(); File3Count <- c(); for (j in c(-.01,0,.01)) { Filename3 <- paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_\", as.character(AncAF + j), \".frq.gz\", sep=\"\"); if (file.exists(Filename3)) { Data3 <- read.table(Filename3, header=F); Data2 <- rbind(Data2, Data3); File3Count <- c(File3Count, j); }; }; print(c(AncAF, paste(File3Count, collapse=\",\"), dim(Data3))); \ 
+				set.seed(as.numeric(as.character($TotalSeed1))+i); RowVals1 <- sample(1:nrow(Data3)); for (k in 1:10) { \
+						write.table(Data3[RowVals1[k],], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm\", as.character(k), \".txt\", sep=\"\"), append=TRUE, quote=FALSE, row.names=FALSE, col.names=FALSE); \
 				}; \
-			};"
+			};" > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Summary.txt
+			gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/*
 
 		done
 	done
@@ -224,6 +226,41 @@ rs1000085       C       G       0.2121  C       G       0.2308  C       G       
 rs1000127       C       T       0.3081  C       T       0.2967  C       T       0.2664  C       T       0.2991  C       T       0.1852  C       T       0.1566
 rs1000184       C       G       0.2879  C       G       0.2253  C       G       0.1776  C       G       0.229   C       G       0.00463 0       G       0
 rs1000282       C       T       0.197   C       T       0.2363  C       T       0.1916  C       T       0.2009  C       T       0.1667  C       T       0.1364
+[  mturchin@node1162  ~/data/mturchin/Loh2017]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/Loh2017.Height.lt5eNeg9/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm1.txt.gz
+rs12673771 C T 0.4949 0.5659 0.528 0.5327 0.530375 0.035475 0.0355249999999999 0.00237500000000002 0.00232499999999991
+rs75706943 T C 0.1566 0.1264 0.1729 0.1355 0.14785 0.00874999999999998 0.02145 0.02505 0.01235
+rs111252186 G A 0.06566 0.05495 0.04206 0.04206 0.0511825 0.0144775 0.0037675 0.0091225 0.0091225
+rs62511744 G T 0.1414 0.1978 0.1589 0.1682 0.166575 0.025175 0.031225 0.00767499999999999 0.00162499999999999
+rs3904796 T C 0.2727 0.3571 0.271 0.3411 0.310475 0.037775 0.046625 0.039475 0.030625
+rs7691417 T C 0.3939 0.511 0.4626 0.4299 0.44935 0.0554500000000001 0.06165 0.01325 0.01945
+rs2757579 G T 0.3788 0.2967 0.3598 0.3318 0.341775 0.037025 0.045075 0.018025 0.00997500000000001
+rs1731433 G A 0.1717 0.1154 0.1729 0.1869 0.161725 0.00997499999999998 0.046325 0.011175 0.025175
+rs139664127 A T 0.02525 0.01648 1 1 0.5104325 0.4851825 0.4939525 0.4895675 0.4895675
+rs77942014 A G 0.1061 0.0989 0.1028 0.06075 0.0921375 0.0139625 0.0067625 0.0106625 0.0313875
+#Change seed value to a constant
+[  mturchin@node1162  ~/data/mturchin/Loh2017]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/Loh2017.Height.lt5eNeg9/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm1.txt.gz
+rs1117507 G A 0.4848 0.4945 0.6028 0.5187 0.5252 0.0404 0.0307 0.0776 0.00649999999999995
+rs72963507 A G 0.1212 0.1319 0.1729 0.1542 0.14505 0.02385 0.01315 0.02785 0.00914999999999999
+rs75479897 A G 0.05051 0.04945 0.04206 0.04206 0.04602 0.00449 0.00343 0.00396 0.00396
+rs6822200 C T 0.1212 0.1978 0.1776 0.1916 0.17205 0.05085 0.02575 0.00555 0.01955
+rs6446530 C T 0.303 0.3462 0.3178 0.2664 0.30835 0.00535000000000002 0.03785 0.00945000000000001 0.04195
+rs7654800 G C 0.4192 0.4176 0.472 0.472 0.4452 0.026 0.0276 0.0268 0.0268
+rs6847767 C G 0.3333 0.3462 0.3364 0.3458 0.340425 0.00712499999999999 0.00577500000000003 0.004025 0.00537500000000002
+rs72648749 T C 0.1515 0.1648 0.1542 0.1495 0.155 0.0035 0.0098 0.000799999999999995 0.0055
+rs6830604 C T 0.4697 0.4835 0.5654 0.5187 0.509325 0.039625 0.025825 0.056075 0.00937500000000002
+rs76269601 T C 0.07071 0.09341 0.08411 0.1075 0.0889325 0.0182225 0.00447750000000001 0.00482249999999999 0.0185675
+#Change seed value back to original code
+[  mturchin@node1162  ~/data/mturchin/Loh2017]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/Loh2017.Height.lt5eNeg9/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm1.txt.gz 
+rs12673771 C T 0.4949 0.5659 0.528 0.5327 0.530375 0.035475 0.0355249999999999 0.00237500000000002 0.00232499999999991
+rs75706943 T C 0.1566 0.1264 0.1729 0.1355 0.14785 0.00874999999999998 0.02145 0.02505 0.01235
+rs111252186 G A 0.06566 0.05495 0.04206 0.04206 0.0511825 0.0144775 0.0037675 0.0091225 0.0091225
+rs62511744 G T 0.1414 0.1978 0.1589 0.1682 0.166575 0.025175 0.031225 0.00767499999999999 0.00162499999999999
+rs3904796 T C 0.2727 0.3571 0.271 0.3411 0.310475 0.037775 0.046625 0.039475 0.030625
+rs7691417 T C 0.3939 0.511 0.4626 0.4299 0.44935 0.0554500000000001 0.06165 0.01325 0.01945
+rs2757579 G T 0.3788 0.2967 0.3598 0.3318 0.341775 0.037025 0.045075 0.018025 0.00997500000000001
+rs1731433 G A 0.1717 0.1154 0.1729 0.1869 0.161725 0.00997499999999998 0.046325 0.011175 0.025175
+rs139664127 A T 0.02525 0.01648 1 1 0.5104325 0.4851825 0.4939525 0.4895675 0.4895675
+rs77942014 A G 0.1061 0.0989 0.1028 0.06075 0.0921375 0.0139625 0.0067625 0.0106625 0.0313875
 
 
 ~~~
