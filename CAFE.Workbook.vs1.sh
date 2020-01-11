@@ -59,6 +59,11 @@ zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapM
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | awk '{ if ($7 < 5e-8) { print $0 } } ' | gzip > /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.txt.gz
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | awk '{ if ($7 < 1e-4) { print $0 } } ' | gzip > /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.txt.gz
 
+##zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | awk '{ print $5 "\t" $3 "\t" $4 "\t" $9 "\t" $10 "\t" $12 }' | grep -v pval | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Neale2017/Vs2/50.assoc.edits1.tsv.gz
+zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | awk '{ print $5 "\t" $3 "\t" $4 "\t" $9 "\t" $10 "\t" $12 }' | grep -v pval | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Neale2017/Vs2/Neal2017.Height.edits.txt.gz
+zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($4 != $6) { $8 = -1 * $8; val1 = $4; val2 = $5; $4 = val2; $5 = val1; }; print $1 "\t" $4 "\t" $5 "\t" $8 "\t" $9 "\t" $10 }' | grep -v SNP | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Loh2017/Loh2017.Height.edits.txt.gz
+zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | awk '{ print $1 "\t" $2 "\t" $3 "\t" $5 "\t" $6 "\t" $7 }' | grep -v Allele | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > /users/mturchin/Data2/GIANT/GIANT2014_5.Height.edits.txt.gz
+
 ##zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; print(dim(Data3)); print(head(Data3)); };"
 rm $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt.gz; zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt
 rm -f $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt.gz; zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt
@@ -113,16 +118,47 @@ rm -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFile
 
 done; gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/*
 
+
+
+
+PROBLEM FIX: 
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.25.frq.gz | awk '{ print $1 }' | wc        
+ 117893  117893 1223855
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.25.frq.gz | awk '{ print $1 }' | sort | uniq | wc
+ 117881  117881 1223720
+[  mturchin@node1149  ~]$ls -lrt /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
+-rw-r--r--. 1 mturchin sramacha 239 Jun 16  2019 /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
+rs12186596 G A 0.3485 1 1 0.4206 0.692275 0.343775 0.307725 0.307725 0.271675
+rs12186596 G A 0.3485 1 1 0.4206 0.692275 0.343775 0.307725 0.307725 0.271675
+rs12186596 G A 0.3485 1 1 0.4206 0.692275 0.343775 0.307725 0.307725 0.271675
+rs12186596 G A 0.3485 1 1 0.4206 0.692275 0.343775 0.307725 0.307725 0.271675
+rs12186596 G A 0.3485 1 0.4065 1 0.68875 0.34025 0.31125 0.28225 0.31125
+rs12186596 G A 0.3485 1 0.4065 1 0.68875 0.34025 0.31125 0.28225 0.31125
+rs12186596 G A 0.3485 1 0.4065 1 0.68875 0.34025 0.31125 0.28225 0.31125
+rs12186596 G A 0.3485 1 0.4065 1 0.68875 0.34025 0.31125 0.28225 0.31125
+
+
+
+
+
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/Loh2017
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/Neale2017
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/GIANT2014_5
 
+CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.48.frq.gz
 
+#Loh2017
+add in loh/neale/giant loop
+for i in `ls -lrt /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/ | awk '{ print $9 }' | head -n 10`; do
+	AFFile1="/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/${i}";
+	AFFile1NewPre=`echo $AFFile1 | sed 's/.frq.gz//g'`; AFFile1New="${AFFile1NewPre}.Loh2017.frq";
+	echo $AFFile1 $AFFile1New
 
+	match height file allele to affile, switch beta if needed, then check if beta positive, and switch everything if not
+	join <(zcat $AFFile1 | sort -k 1,1) <(zcat $HOME/data/mturchin/Loh2017/Loh2017.Height.edits.txt.gz | awk '{  
 
-
-
-
+done
 
 
 
@@ -137,8 +173,6 @@ variant rsid    nCompleteSamples        AC      ytx     beta    se      tstat   
 5:43889057:C:T  rs13189727      336474  1.25266e+04     4.21457e+02     -1.25947e-02    6.42476e-03     -1.96034e+00    4.99575e-02
 5:43889207:A:G  rs4516856       336474  6.69113e+05     2.89791e+04     1.96508e-02     1.14359e-02     1.71835e+00     8.57338e-02
 5:43889333:G:T  rs114787943     336474  3.03587e+03     5.56253e+01     -1.58425e-02    1.28856e-02     -1.22947e+00    2.18896e-01
-
-[  mturchin@node1149  ~]$Cr ^C
 [  mturchin@node1149  ~]$zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | head -n 10
 MarkerName      Allele1 Allele2 Freq.Allele1.HapMapCEU  b       SE      p       N       ChrBP
 rs4747841       A       G       0.551   -0.0011 0.0029  0.70    253213  10_10000134
@@ -405,6 +439,74 @@ rs2757579 G T 0.3788 0.2967 0.3598 0.3318 0.341775 0.037025 0.045075 0.018025 0.
 rs1731433 G A 0.1717 0.1154 0.1729 0.1869 0.161725 0.00997499999999998 0.046325 0.011175 0.025175
 rs139664127 A T 0.02525 0.01648 1 1 0.5104325 0.4851825 0.4939525 0.4895675 0.4895675
 rs77942014 A G 0.1061 0.0989 0.1028 0.06075 0.0921375 0.0139625 0.0067625 0.0106625 0.0313875
+#20200111
+[  mturchin@node1149  ~]$zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | head -n 10
+variant rsid    nCompleteSamples        AC      ytx     beta    se      tstat   pval
+5 43888254 C T  rs13184706      336474  1.23213e+04     3.83186e+02     -1.33660e-02    6.48300e-03     -2.06170e+00    3.92375e-02
+5 43888493 C T  rs58824264      336474  2.42483e+03     3.70381e+01     -1.88438e-02    1.44299e-02     -1.30589e+00    1.91592e-01
+5 43888556 T C  rs72762387      336474  1.64428e+04     6.65756e+02     -9.45691e-03    5.62698e-03     -1.68064e+00    9.28345e-02
+5 43888648 C T  rs115032754     336474  1.35047e+04     5.66843e+02     1.06178e-03     6.29484e-03     1.68674e-01     8.66053e-01
+5 43888690 C G  rs147555725     336474  1.24755e+03     4.51586e+01     -4.19957e-03    2.06522e-02     -2.03347e-01    8.38864e-01
+5 43888838 G C  rs13185925      336474  2.33424e+04     8.95665e+02     -8.69909e-03    4.74596e-03     -1.83294e+00    6.68117e-02
+5 43889057 C T  rs13189727      336474  1.25266e+04     4.21457e+02     -1.25947e-02    6.42476e-03     -1.96034e+00    4.99575e-02
+5 43889207 A G  rs4516856       336474  6.69113e+05     2.89791e+04     1.96508e-02     1.14359e-02     1.71835e+00     8.57338e-02
+5 43889333 G T  rs114787943     336474  3.03587e+03     5.56253e+01     -1.58425e-02    1.28856e-02     -1.22947e+00    2.18896e-01
+[  mturchin@node1149  ~]$zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | awk '{ print $5 "\t" $3 "\t" $4 "\t" $9 "\t" $10 "\t" $12 }' | head -n 10
+ytx     nCompleteSamples        AC      pval
+rs13184706      C       T       -1.33660e-02    6.48300e-03     3.92375e-02
+rs58824264      C       T       -1.88438e-02    1.44299e-02     1.91592e-01
+rs72762387      T       C       -9.45691e-03    5.62698e-03     9.28345e-02
+rs115032754     C       T       1.06178e-03     6.29484e-03     8.66053e-01
+rs147555725     C       G       -4.19957e-03    2.06522e-02     8.38864e-01
+rs13185925      G       C       -8.69909e-03    4.74596e-03     6.68117e-02
+rs13189727      C       T       -1.25947e-02    6.42476e-03     4.99575e-02
+rs4516856       A       G       1.96508e-02     1.14359e-02     8.57338e-02
+rs114787943     G       T       -1.58425e-02    1.28856e-02     2.18896e-01
+[  mturchin@node1149  ~]$zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | awk '{ print $6 "\t" $7 "\t" $9 }' | head -n 10
+beta    se      pval
+-1.33660e-02    6.48300e-03     3.92375e-02
+-1.88438e-02    1.44299e-02     1.91592e-01
+-9.45691e-03    5.62698e-03     9.28345e-02
+1.06178e-03     6.29484e-03     8.66053e-01
+-4.19957e-03    2.06522e-02     8.38864e-01
+-8.69909e-03    4.74596e-03     6.68117e-02
+-1.25947e-02    6.42476e-03     4.99575e-02
+1.96508e-02     1.14359e-02     8.57338e-02
+-1.58425e-02    1.28856e-02     2.18896e-01
+[  mturchin@node1308  ~]$zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($4 != $6) { $8 = -1 * $8; val1 = $4; val2 = $5; $4 = $val2; $5 = $val1; }; print $1 "\t" $4 "\t" $5 "\t" $8 "\t" $9 "\t" $10 }' | head -n 10
+SNP     SNP CHR POS A1 A2 REF EAF 0 se P N INFO SNP CHR POS SNP CHR POS A1 A2 REF EAF 0 se P N INFO A2 REF EAF 0 se P N INFO    0       se      P
+rs10399793      T       C       -0.00104841     0.00272961      8.6E-01
+rs2462492       C       T       -0.00505746     0.00270391      1.1E-01
+rs3107975       T       C       0.00918983      0.015069        6.3E-01
+rs74447903      T       C       -0.00814975     0.0335016       7.8E-01
+1:70728_C_T     C       T       -0.0222717      0.0272397       5.9E-01
+rs2462495       A       G       -0.0429876      0.0346811       3.6E-01
+rs114608975     T       C       -0.000955315    0.00432242      5.1E-01
+rs6702460       G       T       -0.00371767     0.00266258      3.6E-01
+rs8179466       C       T       0.00195976      0.00525025      7.0E-01
+[  mturchin@node1308  ~]$zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($4 != $6) { $8 = -1 * $8; val1 = $4; val2 = $5; $4 = val2; $5 = val1; }; print $1 "\t" $4 "\t" $5 "\t" $8 "\t" $9 "\t" $10 }' | head -n 10
+SNP     A2      A1      0       se      P
+rs10399793      T       C       -0.00104841     0.00272961      8.6E-01
+rs2462492       C       T       -0.00505746     0.00270391      1.1E-01
+rs3107975       T       C       0.00918983      0.015069        6.3E-01
+rs74447903      T       C       -0.00814975     0.0335016       7.8E-01
+1:70728_C_T     C       T       -0.0222717      0.0272397       5.9E-01
+rs2462495       A       G       -0.0429876      0.0346811       3.6E-01
+rs114608975     T       C       -0.000955315    0.00432242      5.1E-01
+rs6702460       G       T       -0.00371767     0.00266258      3.6E-01
+rs8179466       C       T       0.00195976      0.00525025      7.0E-01
+[  mturchin@node1308  ~]$zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($4 != $6) { $8 = -1 * $8; print $4 "\t" $5; val1 = $4; val2 = $5; $4 = val2; $5 = val1; print $4 "\t" $5; }; print $1 "\t" $4 "\t" $5 "\t" $8 "\t" $9 "\t" $10 }' | head -n 10
+A1      A2
+A2      A1
+SNP     A2      A1      0       se      P
+rs10399793      T       C       -0.00104841     0.00272961      8.6E-01
+rs2462492       C       T       -0.00505746     0.00270391      1.1E-01
+rs3107975       T       C       0.00918983      0.015069        6.3E-01
+rs74447903      T       C       -0.00814975     0.0335016       7.8E-01
+1:70728_C_T     C       T       -0.0222717      0.0272397       5.9E-01
+rs2462495       A       G       -0.0429876      0.0346811       3.6E-01
+rs114608975     T       C       -0.000955315    0.00432242      5.1E-01
+
 
 
 ~~~
