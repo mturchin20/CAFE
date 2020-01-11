@@ -113,6 +113,107 @@ rm -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFile
 
 done; gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/*
 
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/Loh2017
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/Neale2017
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/GIANT2014_5
+
+
+
+
+
+
+
+
+
+
+[  mturchin@node1149  ~]$zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | head -n 10
+variant rsid    nCompleteSamples        AC      ytx     beta    se      tstat   pval
+5:43888254:C:T  rs13184706      336474  1.23213e+04     3.83186e+02     -1.33660e-02    6.48300e-03     -2.06170e+00    3.92375e-02
+5:43888493:C:T  rs58824264      336474  2.42483e+03     3.70381e+01     -1.88438e-02    1.44299e-02     -1.30589e+00    1.91592e-01
+5:43888556:T:C  rs72762387      336474  1.64428e+04     6.65756e+02     -9.45691e-03    5.62698e-03     -1.68064e+00    9.28345e-02
+5:43888648:C:T  rs115032754     336474  1.35047e+04     5.66843e+02     1.06178e-03     6.29484e-03     1.68674e-01     8.66053e-01
+5:43888690:C:G  rs147555725     336474  1.24755e+03     4.51586e+01     -4.19957e-03    2.06522e-02     -2.03347e-01    8.38864e-01
+5:43888838:G:C  rs13185925      336474  2.33424e+04     8.95665e+02     -8.69909e-03    4.74596e-03     -1.83294e+00    6.68117e-02
+5:43889057:C:T  rs13189727      336474  1.25266e+04     4.21457e+02     -1.25947e-02    6.42476e-03     -1.96034e+00    4.99575e-02
+5:43889207:A:G  rs4516856       336474  6.69113e+05     2.89791e+04     1.96508e-02     1.14359e-02     1.71835e+00     8.57338e-02
+5:43889333:G:T  rs114787943     336474  3.03587e+03     5.56253e+01     -1.58425e-02    1.28856e-02     -1.22947e+00    2.18896e-01
+
+[  mturchin@node1149  ~]$Cr ^C
+[  mturchin@node1149  ~]$zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | head -n 10
+MarkerName      Allele1 Allele2 Freq.Allele1.HapMapCEU  b       SE      p       N       ChrBP
+rs4747841       A       G       0.551   -0.0011 0.0029  0.70    253213  10_10000134
+rs4749917       T       C       0.436   0.0011  0.0029  0.70    253213  10_10000264
+rs737656        A       G       0.367   -0.0062 0.0030  0.042   253116  10_100002728
+rs737657        A       G       0.358   -0.0062 0.0030  0.041   252156  10_100002879
+rs7086391       T       C       0.12    -0.0087 0.0038  0.024   248425  10_100003552
+rs878177        T       C       0.3     0.014   0.0031  8.2e-06 251271  10_100003804
+rs878178        A       T       0.644   0.0067  0.0031  0.029   253086  10_100003966
+rs12219605      T       G       0.427   0.0011  0.0029  0.70    253213  10_10000458
+rs3763688       C       G       0.144   -0.0022 0.0045  0.62    253056  10_100005552
+[  mturchin@node1149  ~]$zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.gz | head -n 10
+SNP     CHR     POS     A1      A2      REF     EAF     Beta    se      P       N       INFO
+rs10399793      1       49298   T       C       T       0.376205        -0.00104841     0.00272961      8.6E-01 458303  0.342797
+rs2462492       1       54676   C       T       C       0.599409        -0.00505746     0.00270391      1.1E-01 458303  0.340158
+rs3107975       1       55326   T       C       T       0.991557        0.00918983      0.015069        6.3E-01 458303  0.324228
+rs74447903      1       57033   T       C       T       0.998221        -0.00814975     0.0335016       7.8E-01 458303  0.296256
+1:70728_C_T     1       70728   C       T       C       0.997834        -0.0222717      0.0272397       5.9E-01 458303  0.365713
+rs2462495       1       79033   A       G       A       0.00129168      -0.0429876      0.0346811       3.6E-01 458303  0.536566
+rs114608975     1       86028   T       C       T       0.896401        -0.000955315    0.00432242      5.1E-01 458303  0.340885
+rs6702460       1       91536   G       T       G       0.543017        -0.00371767     0.00266258      3.6E-01 458303  0.340746
+rs8179466       1       234313  C       T       C       0.925496        0.00195976      0.00525025      7.0E-01 458303  0.311447
+
+
+
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | head -n 10
+SNP     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF
+rs1000039       T       G       0.0202  T       G       0.03846 T       G       0.03738 T       G       0.02804 T       G       0.1898  T       G       0.1667
+rs1000107       C       T       0.0303  C       T       0.01648 C       T       0.04206 C       T       0.04673 C       T       0.02315 C       T       0.01515
+rs1000135       C       T       0.2273  C       T       0.1758  C       T       0.1636  C       T       0.1636  C       T       0.06019 C       T       0.07576
+rs1000218       C       T       0.399   C       T       0.3901  C       T       0.3692  C       T       0.4299  C       T       0.3426  C       T       0.2879
+rs1000219       T       G       0.399   T       G       0.3901  T       G       0.3692  T       G       0.4299  T       G       0.3565  T       G       0.298
+rs1000251       T       C       0.1667  T       C       0.2363  T       C       0.229   T       C       0.1355  0       C       0       0       C       0
+rs1000252       C       G       0.3333  C       G       0.4286  C       G       0.4206  C       G       0.3084  C       G       0.2685  C       G       0.298
+rs1000266       C       G       0.2222  C       G       0.1813  C       G       0.1822  C       G       0.2196  C       G       0.3009  C       G       0.2828
+rs1000278       T       C       0.4848  T       C       0.4396  T       C       0.3832  T       C       0.4112  T       C       0.2454  T       C       0.202
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | head -n 10
+rs1000039 T G 0.0202 0.03846 0.03738 0.02804 0.03102 0.01082 0.00744 0.00636 0.00298
+rs1000107 C T 0.0303 0.01648 0.04206 0.04673 0.0338925 0.0035925 0.0174125 0.0081675 0.0128375
+rs1000135 C T 0.2273 0.1758 0.1636 0.1636 0.182575 0.044725 0.00677499999999998 0.018975 0.018975
+rs1000218 C T 0.399 0.3901 0.3692 0.4299 0.39705 0.00195000000000001 0.00695000000000001 0.02785 0.03285
+rs1000219 T G 0.399 0.3901 0.3692 0.4299 0.39705 0.00195000000000001 0.00695000000000001 0.02785 0.03285
+rs1000251 T C 0.1667 0.2363 0.229 0.1355 0.191875 0.025175 0.044425 0.037125 0.056375
+rs1000252 C G 0.3333 0.4286 0.4206 0.3084 0.372725 0.039425 0.055875 0.047875 0.064325
+rs1000266 C G 0.2222 0.1813 0.1822 0.2196 0.201325 0.020875 0.020025 0.019125 0.018275
+rs1000278 T C 0.4848 0.4396 0.3832 0.4112 0.4297 0.0551 0.00990000000000002 0.0465 0.0185
+rs1000280 A G 0.3485 0.3352 0.2757 0.229 0.2971 0.0514 0.0381 0.0214 0.0681
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.53
+.frq.gz | head -n 10
+rs1006610 T C 0.4697 0.544 0.514 0.5888 0.529125 0.0594250000000001 0.014875 0.0151250000000001 0.0596749999999999
+rs1007788 G C 0.4747 0.5165 0.5841 0.5374 0.528175 0.0534749999999999 0.011675 0.055925 0.00922500000000004
+rs1007993 A C 0.4747 0.5165 0.5841 0.5374 0.528175 0.0534749999999999 0.011675 0.055925 0.00922500000000004
+rs1014985 T G 0.4949 0.5495 0.5607 0.4953 0.5251 0.0302 0.0244 0.0356 0.0298
+rs10157140 T C 0.4899 0.6044 0.5 0.5421 0.5341 0.0442 0.0703 0.0341 0.00800000000000001
+rs10158342 A C 0.4798 0.511 0.5514 0.5654 0.5269 0.0471 0.0159 0.0245 0.0385
+rs10158471 A G 0.4949 0.5055 0.5467 0.5654 0.528125 0.0332249999999999 0.022625 0.018575 0.0372750000000001
+rs1032424 G A 0.4949 0.5275 0.5047 0.5981 0.5313 0.0364 0.00380000000000003 0.0266 0.0668
+rs1038321 A G 0.4697 0.4945 0.6121 0.5561 0.5331 0.0634 0.0386 0.079 0.023
+rs1041902 T A 0.4848 0.4835 0.5561 0.5841 0.527125 0.0423249999999999 0.043625 0.0289750000000001 0.056975
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data
 mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps
 
@@ -168,8 +269,9 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
 	done
 done
 
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses/Perms
+##mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses
+##mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses/Perms
+mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms
 
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
         iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
@@ -180,15 +282,15 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
                         TotalSeed1=$((iSeed1+jSeed1+kSeed1));
                         echo $i $j $k $TotalSeed1
 
-			rm -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt; for l in {1..20}; do
-				zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt 
+			rm -f /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt; for l in {1..20}; do
+				zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
 			done 
 
                 done
         done
 done
 
-#				...Data1[,ncol(Data1)-3]), sd(Data1[,ncol(Data1)-2]), sd(Data1[,ncol(Data1)-1]), sd(Data1[,ncol(Data1)])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
+#				...Data1[,ncol(Data1)-3]), sd(Data1[,ncol(Data1)-2]), sd(Data1[,ncol(Data1)-1]), sd(Data1[,ncol(Data1)])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt 
 
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
         iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
@@ -199,7 +301,7 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
                         TotalSeed1=$((iSeed1+jSeed1+kSeed1));
                         echo $i $j $k $TotalSeed1
 
-			cat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt | head -n 10
+			cat /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt | head -n 10
 
                 done
         done
