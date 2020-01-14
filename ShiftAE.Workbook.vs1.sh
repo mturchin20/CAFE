@@ -17,9 +17,11 @@ R -q -e "library(\"workflowr\"); wflow_build();"
 #From MacBook Pro
 #rsync -zvhia mturchin@ssh.ccv.brown.edu:/users/mturchin/LabMisc/RamachandranLab/InterPath/docs/. /Users/mturchin20/Documents/Work/LabMisc/RamachandranLab/InterPath/docs/.  
 
-
 #20190321
 #Conda environment -- using `MultiEthnicGWAS`
+
+#20200114
+#Updated naming convention from `CAFE` to `ShiftAE`
 
 
 #20190321
@@ -27,9 +29,9 @@ R -q -e "library(\"workflowr\"); wflow_build();"
 
 #Idea -- SNPs undergoing drift should randomly fluctuate to both higher and lower frequencies 'equally' (modulo population demographic misc) from their ancestral state over time. SNPs undergoing weak selective pressures in a given direction should experience less overall variance in their change in frequency since their ancestral state (alleles that are favored get pushed up; if you don't know orientation properly, can just use absolute difference since amount pushed up or amount pushed down are equivalent; looking at overall standard difference amongst 'AF change since ancestral state'; AF affects how much has changed since ancestral, but will be doing matched permutations on ancestral AF so within the final score, that's fine; the idea is that all alleles have similar changes in AF since ancestral state when they're being weakly selected, so they are more similar than random chance alone given a normal distribution variance)
 
-mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE
-mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1
-mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses
+mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE
+mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1
+mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses
 
 for pop1 in `echo "CEU GBR TSI IBS YRI ESN"`; do 
 	echo $pop1
@@ -48,35 +50,40 @@ done
 
 mkdir $HOME/data/mturchin/Neale2017/Vs2
 mv $HOME/data/mturchin/Neale2017/* $HOME/data/mturchin/Neale2017/Vs2/.
+#20200114 NOTE: below move to $HOME/data/mturchin/Data directory setup
+mkdir $HOME/data/mturchin/Data
+mv $HOME/data/mturchin/Neale2017 $HOME/data/mturchin/Data/.
+mv $HOME/data/mturchin/Loh2017 $HOME/data/mturchin/Data/.
+mkdir $HOME/data/mturchin/Data/GIANT2014_5
 #From midway
 #scp -p /project/mstephens/mturchin20/gluster/data/external_public_supp/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz mturchin@ssh.ccv.brown.edu:/users/mturchin/Data2/GIANT/.
 
-zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | awk '{ if ($9 < 5e-9) { print $0 } } ' | gzip > $HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt5eNeg9.tsv.gz
-zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | awk '{ if ($9 < 1e-4) { print $0 } } ' | gzip > $HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt1eNeg4.tsv.gz
-zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($10 < 5e-9) { print $0 } } ' | gzip > $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.gz
-zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($10 < 1e-4) { print $0 } } ' | gzip > $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.gz
+zcat $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.tsv.gz | awk '{ if ($9 < 5e-9) { print $0 } } ' | gzip > $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt5eNeg9.tsv.gz
+zcat $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.tsv.gz | awk '{ if ($9 < 1e-4) { print $0 } } ' | gzip > $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt1eNeg4.tsv.gz
+zcat $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($10 < 5e-9) { print $0 } } ' | gzip > $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.gz
+zcat $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($10 < 1e-4) { print $0 } } ' | gzip > $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.gz
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | awk '{ if ($7 < 5e-9) { print $0 } } ' | gzip > /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.txt.gz
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | awk '{ if ($7 < 5e-8) { print $0 } } ' | gzip > /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.txt.gz
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | awk '{ if ($7 < 1e-4) { print $0 } } ' | gzip > /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.txt.gz
 
-##zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | awk '{ print $5 "\t" $3 "\t" $4 "\t" $9 "\t" $10 "\t" $12 }' | grep -v pval | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Neale2017/Vs2/50.assoc.edits1.tsv.gz
-zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | awk '{ print $5 "\t" $3 "\t" $4 "\t" $9 "\t" $10 "\t" $12 }' | grep -v pval | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Neale2017/Vs2/Neal2017.Height.edits.txt.gz
-zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($4 != $6) { $8 = -1 * $8; val1 = $4; val2 = $5; $4 = val2; $5 = val1; }; print $1 "\t" $4 "\t" $5 "\t" $8 "\t" $9 "\t" $10 }' | grep -v SNP | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Loh2017/Loh2017.Height.edits.txt.gz
+##zcat $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | awk '{ print $5 "\t" $3 "\t" $4 "\t" $9 "\t" $10 "\t" $12 }' | grep -v pval | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.edits1.tsv.gz
+zcat $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | awk '{ print $5 "\t" $3 "\t" $4 "\t" $9 "\t" $10 "\t" $12 }' | grep -v pval | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Data/Neale2017/Vs2/Neale2017.Height.edits.txt.gz
+zcat $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($4 != $6) { $8 = -1 * $8; val1 = $4; val2 = $5; $4 = val2; $5 = val1; }; print $1 "\t" $4 "\t" $5 "\t" $8 "\t" $9 "\t" $10 }' | grep -v SNP | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Data/Loh2017/Loh2017.Height.edits.txt.gz
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | awk '{ print $1 "\t" $2 "\t" $3 "\t" $5 "\t" $6 "\t" $7 }' | grep -v Allele | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > /users/mturchin/Data2/GIANT/GIANT2014_5.Height.edits.txt.gz
 
-##zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; print(dim(Data3)); print(head(Data3)); };"
-rm $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt.gz; zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt
-rm -f $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt.gz; zcat $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt
-rm -f $HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.tsv.gz; zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt5eNeg9.tsv.gz | sed 's/:/ /' | sed 's/:/ /' | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,1] == i,]; Data3 <- Data2[order(-log10(Data2[,11]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,11]), Data2[,1], Data2[,2]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.tsv\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.tsv
-rm -f $HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.tsv.gz; zcat $HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt1eNeg4.tsv.gz | sed 's/:/ /' | sed 's/:/ /' | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,1] == i,]; Data3 <- Data2[order(-log10(Data2[,11]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,11]), Data2[,1], Data2[,2]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.tsv\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.tsv
+##zcat $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; print(dim(Data3)); print(head(Data3)); };"
+rm $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt.gz; zcat $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt
+rm -f $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt.gz; zcat $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.gz | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,2] == i,]; Data3 <- Data2[order(-log10(Data2[,10]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,10]), Data2[,2], Data2[,3]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt
+rm -f $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.tsv.gz; zcat $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt5eNeg9.tsv.gz | sed 's/:/ /' | sed 's/:/ /' | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,1] == i,]; Data3 <- Data2[order(-log10(Data2[,11]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,11]), Data2[,1], Data2[,2]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.tsv\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.tsv
+rm -f $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.tsv.gz; zcat $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt1eNeg4.tsv.gz | sed 's/:/ /' | sed 's/:/ /' | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,1] == i,]; Data3 <- Data2[order(-log10(Data2[,11]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,11]), Data2[,1], Data2[,2]) == 1,]; write.table(Data3, file=\"$HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.tsv\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.tsv
 rm -f /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.GrdyClmp.tx*; zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.txt.gz | grep -v NA | grep -v , | sed 's/_/ /g' | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,9] == i,]; Data3 <- Data2[order(-log10(Data2[,7]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,7]), Data2[,9], Data2[,10]) == 1,]; write.table(Data3, file=\"/users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.GrdyClmp.txt
 rm -f /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.tx*; zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.txt.gz | grep -v NA | grep -v , | sed 's/_/ /g' | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,9] == i,]; Data3 <- Data2[order(-log10(Data2[,7]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,7]), Data2[,9], Data2[,10]) == 1,]; write.table(Data3, file=\"/users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.txt
 rm -f /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.tx*; zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.txt.gz | grep -v NA | grep -v , | sed 's/_/ /g' | R -q -e "library(\"devtools\"); devtools::load_all(\"/users/mturchin/LabMisc/StephensLab/bmass\"); Data1 <- read.table(file('stdin'), header=F); for (i in 1:22) { print(i); Data2 <- Data1[Data1[,9] == i,]; Data3 <- Data2[order(-log10(Data2[,7]), decreasing=TRUE),]; Data3 <- Data3[indephits(-log10(Data2[,7]), Data2[,9], Data2[,10]) == 1,]; write.table(Data3, file=\"/users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.txt\", append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE); };"; gzip -f /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.txt
 
-zcat /users/mturchin/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt.gz | awk '{ print $1 }' | gzip > /users/mturchin/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz 
-zcat /users/mturchin/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt.gz | awk '{ print $1 }' | gzip > /users/mturchin/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz 
-zcat /users/mturchin/data/mturchin//Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.tsv.gz | awk '{ print $4 }' | gzip > /users/mturchin/data/mturchin//Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz
-zcat /users/mturchin/data/mturchin//Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.tsv.gz | awk '{ print $4 }' | gzip > /users/mturchin/data/mturchin//Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
+zcat /users/mturchin/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.txt.gz | awk '{ print $1 }' | gzip > /users/mturchin/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz 
+zcat /users/mturchin/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.txt.gz | awk '{ print $1 }' | gzip > /users/mturchin/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz 
+zcat /users/mturchin/data/mturchin/Data//Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.tsv.gz | awk '{ print $4 }' | gzip > /users/mturchin/data/mturchin/Data//Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz
+zcat /users/mturchin/data/mturchin/Data//Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.tsv.gz | awk '{ print $4 }' | gzip > /users/mturchin/data/mturchin/Data//Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.GrdyClmp.txt.gz | awk '{ print $1 }' | gzip > /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.GrdyClmp.rsIDs.gz 
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.txt.gz | awk '{ print $1 }' | gzip > /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.rsIDs.gz 
 zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.txt.gz | awk '{ print $1 }' | gzip > /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.rsIDs.gz 
@@ -90,8 +97,8 @@ zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapM
 #/users/mturchin/LabMisc/HirschhornLab/20180601_Wood2014_HeightGWASSNPs.txt
 
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1
 
 #NOTE -- all 1000G files are on the same strand, and since pop subsets were extracted from the main source AllPops files, they should all start with the same set of SNPs at least (read: http://www.internationalgenome.org/faq/what-strand-are-variants-your-vcf-file/)
 
@@ -102,33 +109,33 @@ for chr1 in `echo {1..22}`; do
 #	join - <(zcat /users/mturchin/data/1000G/subsets/TSI/AFs/TSI.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) | perl -lane 'if ($F[1] eq "0") { if ($F[7] eq "0") { if ($F[2] eq $F[8]) { print join("\t", @F); } } else { if ($F[2] eq $F[8]) { print join("\t", @F); } elsif ($F[2] eq $F[7]) { ($F[7], $F[8]) = ($F[8], $F[7]); $F[9] = 1 - $F[9]; print join("\t", @F); } else { $PH1 = 1; } } } else { if ($F[7] eq "0") { if ($F[1] eq $F[8]) { ($F[7], $F[8]) = ($F[8], $F[7]); $F[9] = 1 - $F[9]; print join("\t", @F); } elsif ($F[2] eq $F[8]) { print join("\t", @F); } else { $PH1 = 1; } } else { if (($F[1] eq $F[7]) && ($F[2] eq $F[8])) { print join("\t", @F); } elsif (($F[1] eq $F[8]) && ($F[2] eq $F[7])) { ($F[7], $F[8]) = ($F[8], $F[7]); $F[9] = 1 - $F[9]; print join("\t", @F); } else { $PH1 = 1; } } }' | \
 #	join - <(zcat /users/mturchin/data/1000G/subsets/IBS/AFs/IBS.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) | perl -lane 'if ($F[1] eq "0") { if ($F[10] eq "0") { if ($F[2] eq $F[11]) { print join("\t", @F); } } else { if ($F[2] eq $F[11]) { print join("\t", @F); } elsif ($F[2] eq $F[10]) { ($F[10], $F[11]) = ($F[11], $F[10]); $F[12] = 1 - $F[12]; print join("\t", @F); } else { $PH1 = 1; } } } else { if ($F[10] eq "0") { if ($F[1] eq $F[11]) { ($F[10], $F[11]) = ($F[11], $F[10]); $F[12] = 1 - $F[12]; print join("\t", @F); } elsif ($F[2] eq $F[11]) { print join("\t", @F); } else { $PH1 = 1; } } else { if (($F[1] eq $F[10]) && ($F[2] eq $F[11])) { print join("\t", @F); } elsif (($F[1] eq $F[11]) && ($F[2] eq $F[10])) { ($F[10], $F[11]) = ($F[11], $F[10]); $F[12] = 1 - $F[12]; print join("\t", @F); } else { $PH1 = 1; } } }' | \ 
 #	join - <(zcat /users/mturchin/data/1000G/subsets/YRI/AFs/YRI.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) | perl -lane 'if ($F[1] eq "0") { if ($F[13] eq "0") { if ($F[2] eq $F[14]) { print join("\t", @F); } } else { if ($F[2] eq $F[14]) { print join("\t", @F); } elsif ($F[2] eq $F[13]) { ($F[13], $F[14]) = ($F[14], $F[13]); $F[15] = 1 - $F[15]; print join("\t", @F); } else { $PH1 = 1; } } } else { if ($F[13] eq "0") { if ($F[1] eq $F[14]) { ($F[13], $F[14]) = ($F[14], $F[13]); $F[15] = 1 - $F[15]; print join("\t", @F); } elsif ($F[2] eq $F[14]) { print join("\t", @F); } else { $PH1 = 1; } } else { if (($F[1] eq $F[13]) && ($F[2] eq $F[14])) { print join("\t", @F); } elsif (($F[1] eq $F[14]) && ($F[2] eq $F[13])) { ($F[13], $F[14]) = ($F[14], $F[13]); $F[15] = 1 - $F[15]; print join("\t", @F); } else { $PH1 = 1; } } }' | \ 
-#	join - <(zcat /users/mturchin/data/1000G/subsets/ESN/AFs/ESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) | perl -lane 'if ($F[1] eq "0") { if ($F[16] eq "0") { if ($F[2] eq $F[17]) { print join("\t", @F); } } else { if ($F[2] eq $F[17]) { print join("\t", @F); } elsif ($F[2] eq $F[16]) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } else { $PH1 = 1; } } } else { if ($F[16] eq "0") { if ($F[1] eq $F[17]) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } elsif ($F[2] eq $F[17]) { print join("\t", @F); } else { $PH1 = 1; } } else { if (($F[1] eq $F[16]) && ($F[2] eq $F[17])) { print join("\t", @F); } elsif (($F[1] eq $F[17]) && ($F[2] eq $F[16])) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } else { $PH1 = 1; } } }' | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz
-#	zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if (($4 > 0) && ($7 > 0) && ($10 > 0) && ($13 > 0)) { print $0 } } ' | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz
-	zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | grep -v MAF | R -q -e "Data1 <- read.table(file('stdin'), header=F); EurMean <- apply(Data1[,c(4,7,10,13)], 1, function(x) { return(mean(x)); }); CEUDiff <- abs(Data1[,4] - EurMean); GBRDiff <- abs(Data1[,7] - EurMean); TSIDiff <- abs(Data1[,10] - EurMean); IBSDiff <- abs(Data1[,13] - EurMean); write.table(cbind(Data1[,c(1,2,3,4,7,10,13)], EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz
+#	join - <(zcat /users/mturchin/data/1000G/subsets/ESN/AFs/ESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if ($6 > 125) { print $0 } } ' | awk '{ print $2 "\t" $3 "\t" $4 "\t" $5}' | sort -k 1,1) | perl -lane 'if ($F[1] eq "0") { if ($F[16] eq "0") { if ($F[2] eq $F[17]) { print join("\t", @F); } } else { if ($F[2] eq $F[17]) { print join("\t", @F); } elsif ($F[2] eq $F[16]) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } else { $PH1 = 1; } } } else { if ($F[16] eq "0") { if ($F[1] eq $F[17]) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } elsif ($F[2] eq $F[17]) { print join("\t", @F); } else { $PH1 = 1; } } else { if (($F[1] eq $F[16]) && ($F[2] eq $F[17])) { print join("\t", @F); } elsif (($F[1] eq $F[17]) && ($F[2] eq $F[16])) { ($F[16], $F[17]) = ($F[17], $F[16]); $F[18] = 1 - $F[18]; print join("\t", @F); } else { $PH1 = 1; } } }' | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz
+#	zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.frq.gz | awk '{ if (($4 > 0) && ($7 > 0) && ($10 > 0) && ($13 > 0)) { print $0 } } ' | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz
+	zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | grep -v MAF | R -q -e "Data1 <- read.table(file('stdin'), header=F); EurMean <- apply(Data1[,c(4,7,10,13)], 1, function(x) { return(mean(x)); }); CEUDiff <- abs(Data1[,4] - EurMean); GBRDiff <- abs(Data1[,7] - EurMean); TSIDiff <- abs(Data1[,10] - EurMean); IBSDiff <- abs(Data1[,13] - EurMean); write.table(cbind(Data1[,c(1,2,3,4,7,10,13)], EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz
 
 done
 
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles
 
-rm -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/*; for chr1 in `echo {1..22}`; do
+rm -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/*; for chr1 in `echo {1..22}`; do
 	echo $chr1
 
-	zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); for (i in 1:nrow(Data1)) { AncAF <- round(Data1[i,8], digits=2); write.table(Data1[i,], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_\", as.character(AncAF), \".frq\", sep=\"\"), append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE);};"
+	zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); for (i in 1:nrow(Data1)) { AncAF <- round(Data1[i,8], digits=2); write.table(Data1[i,], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_\", as.character(AncAF), \".frq\", sep=\"\"), append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE);};"
 
-done; gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/*
+done; gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/*
 
 
 
 
 PROBLEM FIX: 
-[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.25.frq.gz | awk '{ print $1 }' | wc        
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.25.frq.gz | awk '{ print $1 }' | wc        
  117893  117893 1223855
-[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.25.frq.gz | awk '{ print $1 }' | sort | uniq | wc
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.25.frq.gz | awk '{ print $1 }' | sort | uniq | wc
  117881  117881 1223720
-[  mturchin@node1149  ~]$ls -lrt /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
--rw-r--r--. 1 mturchin sramacha 239 Jun 16  2019 /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
-[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
+[  mturchin@node1149  ~]$ls -lrt /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
+-rw-r--r--. 1 mturchin sramacha 239 Jun 16  2019 /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
+[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.69.frq.gz
 rs12186596 G A 0.3485 1 1 0.4206 0.692275 0.343775 0.307725 0.307725 0.271675
 rs12186596 G A 0.3485 1 1 0.4206 0.692275 0.343775 0.307725 0.307725 0.271675
 rs12186596 G A 0.3485 1 1 0.4206 0.692275 0.343775 0.307725 0.307725 0.271675
@@ -142,23 +149,34 @@ rs12186596 G A 0.3485 1 0.4065 1 0.68875 0.34025 0.31125 0.28225 0.31125
 
 
 
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/Loh2017
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/Neale2017
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/GIANT2014_5
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/Loh2017
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/Neale2017
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/GIANT2014_5
 
 CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.48.frq.gz
 
 #Loh2017
 add in loh/neale/giant loop
-for i in `ls -lrt /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/ | awk '{ print $9 }' | head -n 10`; do
-	AFFile1="/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/${i}";
+for i in `ls -lrt /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/ | awk '{ print $9 }' | head -n 10`; do
+	AFFile1="/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/${i}";
 	AFFile1NewPre=`echo $AFFile1 | sed 's/.frq.gz//g'`; AFFile1New="${AFFile1NewPre}.Loh2017.frq";
 	echo $AFFile1 $AFFile1New
 
 	match height file allele to affile, switch beta if needed, then check if beta positive, and switch everything if not
-	join <(zcat $AFFile1 | sort -k 1,1) <(zcat $HOME/data/mturchin/Loh2017/Loh2017.Height.edits.txt.gz | awk '{  
+	join <(zcat $AFFile1 | sort -k 1,1) <(zcat $HOME/data/mturchin/Data/Loh2017/Loh2017.Height.edits.txt.gz | awk '{  
 
 done
+
+$HOME/data/mturchin/Data/Neale2017/Vs2/Neal2017.Height.edits.txt.gz
+$HOME/data/mturchin/Data/Loh2017/Loh2017.Height.edits.txt.gz
+/users/mturchin/Data2/GIANT/GIANT2014_5.Height.edits.txt.gz
+
+
+zcat $HOME/data/mturchin/Data/Neale2017/Vs2/50.assoc.tsv.gz | sed 's/:/ /g' | awk '{ print $5 "\t" $3 "\t" $4 "\t" $9 "\t" $10 "\t" $12 }' | grep -v pval | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Data/Neale2017/Vs2/Neal2017.Height.edits.txt.gz
+zcat $HOME/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.gz | awk '{ if ($4 != $6) { $8 = -1 * $8; val1 = $4; val2 = $5; $4 = val2; $5 = val1; }; print $1 "\t" $4 "\t" $5 "\t" $8 "\t" $9 "\t" $10 }' | grep -v SNP | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > $HOME/data/mturchin/Data/Loh2017/Loh2017.Height.edits.txt.gz
+zcat /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.txt.gz | awk '{ print $1 "\t" $2 "\t" $3 "\t" $5 "\t" $6 "\t" $7 }' | grep -v Allele | cat <(echo -e "rsid\ta1\ta2\tbeta\tse\tpval") - | gzip > /users/mturchin/Data2/GIANT/GIANT2014_5.Height.edits.txt.gz
+
+
 
 
 
@@ -248,30 +266,30 @@ rs1041902 T A 0.4848 0.4835 0.5561 0.5841 0.527125 0.0423249999999999 0.043625 0
 
 
 
-mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data
-mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps
+mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data
+mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps
 
-ln -s /users/mturchin/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/Loh2017.Height.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz
-ln -s /users/mturchin/data/mturchin/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/Loh2017.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
-ln -s /users/mturchin/data/mturchin//Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/Neale2017.Height.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz
-ln -s /users/mturchin/data/mturchin//Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/Neale2017.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
-ln -s /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/GIANT2014_5.Height.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz
-ln -s /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/GIANT2014_5.Height.lt5eNeg8.bmass.GrdyClmp.rsIDs.gz
-ln -s /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/GIANT2014_5.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
+ln -s /users/mturchin/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/Loh2017.Height.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz
+ln -s /users/mturchin/data/mturchin/Data/Loh2017/body_HEIGHTz.sumstats.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/Loh2017.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
+ln -s /users/mturchin/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/Neale2017.Height.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz
+ln -s /users/mturchin/data/mturchin/Data/Neale2017/Vs2/50.assoc.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/Neale2017.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
+ln -s /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg9.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt5eNeg9.bmass.GrdyClmp.rsIDs.gz
+ln -s /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt5eNeg8.bmass.GrdyClmp.rsIDs.gz
+ln -s /users/mturchin/Data2/GIANT/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
 	
 for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
 	for j in `cat <(echo "Height" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 		for k in `cat <(echo "lt5eNeg9 lt1eNeg4 lt5eNeg8" | perl -lane 'print join("\n", @F);') | head -n 2 | tail -n 2`; do
 			echo $i $j $k
 
-#			join <(zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
-			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);"	
+#			join <(zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
+			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);"	
 
 		done
 	done
 done
 
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles
 
 #From: https://stackoverflow.com/questions/14904983/how-do-i-check-the-existence-of-a-local-file
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 1`; do
@@ -283,29 +301,29 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
 			TotalSeed1=$((iSeed1+jSeed1+kSeed1));
 			echo $i $j $k $TotalSeed1
 
-			if [ ! -d /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1 ]; then
-				mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1
+			if [ ! -d /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1 ]; then
+				mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1
 			fi
 
-			rm -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/*
-			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Data/GWASsnps/$iVal1.$jVal1.$kVal1.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); \
+			rm -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/*
+			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$iVal1.$jVal1.$kVal1.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); \
 			for (i in 1:nrow(Data1)) { \
 				AncAF <- round(as.numeric(as.character(Data1[i,8])), digits=2); Data2 <- c(); File3Count <- c(); for (j in c(-.01,0,.01)) { \
-					Filename3 <- paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_\", as.character(AncAF + j), \".frq.gz\", sep=\"\"); if (file.exists(Filename3)) { Data3 <- read.table(Filename3, header=F); Data2 <- rbind(Data2, Data3); File3Count <- c(File3Count, j); }; }; \
+					Filename3 <- paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_\", as.character(AncAF + j), \".frq.gz\", sep=\"\"); if (file.exists(Filename3)) { Data3 <- read.table(Filename3, header=F); Data2 <- rbind(Data2, Data3); File3Count <- c(File3Count, j); }; }; \
 				cat(c(i, as.numeric(as.character($TotalSeed1))+i, AncAF, paste(File3Count, collapse=\",\"), dim(Data2)), \"\n\", sep=\"\t\"); \ 
 				set.seed(as.numeric(as.character($TotalSeed1))+i); RowVals1 <- sample(1:nrow(Data2)); for (k in 1:1000) { \
-						write.table(Data2[RowVals1[k],], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm\", as.character(k), \".txt\", sep=\"\"), append=TRUE, quote=FALSE, row.names=FALSE, col.names=FALSE); \
+						write.table(Data2[RowVals1[k],], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm\", as.character(k), \".txt\", sep=\"\"), append=TRUE, quote=FALSE, row.names=FALSE, col.names=FALSE); \
 				}; \
-			};" | grep -v ^\> > /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Summary.txt
-			gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/*
+			};" | grep -v ^\> > /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Summary.txt
+			gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/*
 
 		done
 	done
 done
 
-##mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses
-##mkdir /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/Analyses/Perms
-mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms
+##mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/Analyses
+##mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/Analyses/Perms
+mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms
 
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
         iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
@@ -316,15 +334,15 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
                         TotalSeed1=$((iSeed1+jSeed1+kSeed1));
                         echo $i $j $k $TotalSeed1
 
-			rm -f /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt; for l in {1..20}; do
-				zcat /users/mturchin/data/1000G/mturchin20/Analyses/CAFE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
+			rm -f /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt; for l in {1..20}; do
+				zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
 			done 
 
                 done
         done
 done
 
-#				...Data1[,ncol(Data1)-3]), sd(Data1[,ncol(Data1)-2]), sd(Data1[,ncol(Data1)-1]), sd(Data1[,ncol(Data1)])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt 
+#				...Data1[,ncol(Data1)-3]), sd(Data1[,ncol(Data1)-2]), sd(Data1[,ncol(Data1)-1]), sd(Data1[,ncol(Data1)])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt 
 
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
         iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
@@ -335,7 +353,7 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
                         TotalSeed1=$((iSeed1+jSeed1+kSeed1));
                         echo $i $j $k $TotalSeed1
 
-			cat /users/mturchin/LabMisc/RamachandranLab/InterPath/CAFE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt | head -n 10
+			cat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt | head -n 10
 
                 done
         done
