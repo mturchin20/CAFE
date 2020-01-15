@@ -156,21 +156,16 @@ mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFF
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/Neale2017
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/GIANT2014_5
 
-CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.48.frq.gz
-
-#Loh2017
-add in loh/neale/giant loop
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 	iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
 	for j in `ls -lrt /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/ | awk '{ print $9 }' | head -n 10`; do
 		AFFile1="/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/${j}";
-		AFFile1NewPre=`echo "/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/${i}/${j}" | sed 's/.frq.gz//g'`; AFFile1New="${AFFile1NewPre}.${i}.frq.gz";
+		AFFile1NewPre=`echo "/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/${iVal1}/${j}" | sed 's/.frq.gz//g'`; AFFile1New="${AFFile1NewPre}.${iVal1}.frq.gz";
 		echo $AFFile1 $AFFile1New
 	
-		match height file allele to affile, switch beta if needed, then check if beta positive, and switch everything if not
 		join <(zcat $AFFile1 | sort -k 1,1) <(zcat /users/mturchin/data/mturchin/Data/$iVal1/$iVal1.Height.edits.txt.gz | grep -v pval | perl -slane 'srand($iSeed2); my $IncAllele; if ($F[3] > 0) { $IncAllele = $F[1]; } elsif ($F[3] < 0) { $IncAllele =$F[2]; } elsif ($F[3] == 0) { my $rand1 = rand(); if ($rand1 > .5) { $IncAllele = $F[1]; } elsif ($rand1 <= .5) { $IncAllele = $F[2]; } else { print STDERR "Error2a -- how did this happen?"; } } else { print STDERR "Error1a -- how did this happen?"; } print $F[0], "\t", $IncAllele;' -- -iSeed2=$iSeed1 | sort -k 1,1) | \
 		perl -lane 'my $flag1 = 0; if ($F[1] eq $F[12]) { $flag1 = 1; } elsif ($F[2] eq $F[12]) { ($F[1], $F[2]) = ($F[2], $F[1]); $F[3] = 1 - $F[3]; $F[4] = 1 - $F[4]; $F[5] = 1 - $F[5]; $F[6] = 1 - $F[6]; $flag1 = 2; } else { $PH1 = 1; } print join("\t", @F), "\t", $flag1;' | \
-		R -q -e "Data1 <- read.table(file('stdin'), header=F); EurMean <- apply(Data1[,c(4:7)], 1, function(x) { return(mean(x)); }); CEUDiff <- Data1[,4] - EurMean; GBRDiff <- Data1[,5] - EurMean; TSIDiff <- Data1[,6] - EurMean; IBSDiff <- Data1[,7] - EurMean; write.table(cbind(Data1[,c(1:7)], EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff, Data1[,ncol(Data1)-1], Data1[,ncol(Data1)]), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > $AFFILE1New
+		R -q -e "Data1 <- read.table(file('stdin'), header=F); EurMean <- apply(Data1[,c(4:7)], 1, function(x) { return(mean(x)); }); CEUDiff <- Data1[,4] - EurMean; GBRDiff <- Data1[,5] - EurMean; TSIDiff <- Data1[,6] - EurMean; IBSDiff <- Data1[,7] - EurMean; write.table(cbind(Data1[,c(1:7)], EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff, Data1[,ncol(Data1)-1], Data1[,ncol(Data1)]), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > $AFFile1New
 
 	done
 done
@@ -178,45 +173,26 @@ done
 1,2,3 4,5,6,7 Avg 9,10,11,12 
 
 $HOME/data/mturchin/Data/Neale2017/Neale2017.Height.edits.txt.gz
-$HOME/data/mturchin/Data/Loh2017/Loh2017.Height.edits.txt.gz
-$HOME/data/mturchin/Data/GIANT2014_5/GIANT2014_5.Height.edits.txt.gz
 
         zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | grep -v MAF | R -q -e "Data1 <- read.table(file('stdin'), header=F); EurMean <- apply(Data1[,c(4,7,10,13)], 1, function(x) { return(mean(x)); }); CEUDiff <- abs(Data1[,4] - EurMean); GBRDiff <- abs(Data1[,7] - EurMean); TSIDiff <- abs(Data1[,10] - EurMean); IBSDiff <- abs(Data1[,13] - EurMean); write.table(cbind(Data1[,c(1,2,3,4,7,10,13)], EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz
 
 (MultiEthnicGWAS) [  mturchin@login003  ~/LabMisc/RamachandranLab/ShiftAE]$zcat $HOME/data/mturchin/Data/Neale2017/Neale2017.Height.edits.txt.gz | head -n 10
 rsid    a1      a2      beta    se      pval
 rs13184706      C       T       -1.33660e-02    6.48300e-03     3.92375e-02
-rs58824264      C       T       -1.88438e-02    1.44299e-02     1.91592e-01
-rs72762387      T       C       -9.45691e-03    5.62698e-03     9.28345e-02
 rs115032754     C       T       1.06178e-03     6.29484e-03     8.66053e-01
-rs147555725     C       G       -4.19957e-03    2.06522e-02     8.38864e-01
 
 [  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.53
 .frq.gz | head -n 10
 rs1006610 T C 0.4697 0.544 0.514 0.5888 0.529125 0.0594250000000001 0.014875 0.0151250000000001 0.0596749999999999
 rs1007788 G C 0.4747 0.5165 0.5841 0.5374 0.528175 0.0534749999999999 0.011675 0.055925 0.00922500000000004
 rs1007993 A C 0.4747 0.5165 0.5841 0.5374 0.528175 0.0534749999999999 0.011675 0.055925 0.00922500000000004
-rs1014985 T G 0.4949 0.5495 0.5607 0.4953 0.5251 0.0302 0.0244 0.0356 0.0298
-rs10157140 T C 0.4899 0.6044 0.5 0.5421 0.5341 0.0442 0.0703 0.0341 0.00800000000000001
-rs10158342 A C 0.4798 0.511 0.5514 0.5654 0.5269 0.0471 0.0159 0.0245 0.0385
-rs10158471 A G 0.4949 0.5055 0.5467 0.5654 0.528125 0.0332249999999999 0.022625 0.018575 0.0372750000000001
-rs1032424 G A 0.4949 0.5275 0.5047 0.5981 0.5313 0.0364 0.00380000000000003 0.0266 0.0668
-rs1038321 A G 0.4697 0.4945 0.6121 0.5561 0.5331 0.0634 0.0386 0.079 0.023
 rs1041902 T A 0.4848 0.4835 0.5561 0.5841 0.527125 0.0423249999999999 0.043625 0.0289750000000001 0.056975
-
+(MultiEthnicGWAS) [  mturchin@login003  ~/LabMisc/RamachandranLab/ShiftAE]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | grep rs1006610
+rs1006610       T       C       0.4697  T       C       0.544   T       C       0.514   T       C       0.5888  T       C       0.6806  T       C       0.7121
 [  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | head -n 10
 SNP     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF
 rs1000039       T       G       0.0202  T       G       0.03846 T       G       0.03738 T       G       0.02804 T       G       0.1898  T       G       0.1667
 rs1000107       C       T       0.0303  C       T       0.01648 C       T       0.04206 C       T       0.04673 C       T       0.02315 C       T       0.01515
-rs1000135       C       T       0.2273  C       T       0.1758  C       T       0.1636  C       T       0.1636  C       T       0.06019 C       T       0.07576
-rs1000218       C       T       0.399   C       T       0.3901  C       T       0.3692  C       T       0.4299  C       T       0.3426  C       T       0.2879
-rs1000219       T       G       0.399   T       G       0.3901  T       G       0.3692  T       G       0.4299  T       G       0.3565  T       G       0.298
-rs1000251       T       C       0.1667  T       C       0.2363  T       C       0.229   T       C       0.1355  0       C       0       0       C       0
-rs1000252       C       G       0.3333  C       G       0.4286  C       G       0.4206  C       G       0.3084  C       G       0.2685  C       G       0.298
-rs1000266       C       G       0.2222  C       G       0.1813  C       G       0.1822  C       G       0.2196  C       G       0.3009  C       G       0.2828
-rs1000278       T       C       0.4848  T       C       0.4396  T       C       0.3832  T       C       0.4112  T       C       0.2454  T       C       0.202
-(MultiEthnicGWAS) [  mturchin@login003  ~/LabMisc/RamachandranLab/ShiftAE]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | grep rs1006610
-rs1006610       T       C       0.4697  T       C       0.544   T       C       0.514   T       C       0.5888  T       C       0.6806  T       C       0.7121
 
 
 
