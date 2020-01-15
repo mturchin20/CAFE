@@ -152,9 +152,9 @@ rs12186596 G A 0.3485 1 0.4065 1 0.68875 0.34025 0.31125 0.28225 0.31125
 
 
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/Loh2017
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/Neale2017
-mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/GIANT2014_5
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/Loh2017
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/Neale2017
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/GIANT2014_5
 
 ~for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 ~	iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
@@ -170,14 +170,12 @@ mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFF
 ~	done
 ~done
 		
-		/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz
-
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 	iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
 	for j in `cat <(echo "Height BMI" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do 
-		for chr1 in `echo {22..22}`; do
+		for chr1 in `echo {1..22}`; do
 			AFFile1="/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz";
-			AFFile1New="/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${j}.Inc.frq.gz";
+			AFFile1New="/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/$iVal1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${j}.Inc.frq.gz";
 			echo $AFFile1 $AFFile1New
 	
 			join <(zcat $AFFile1 | sort -k 1,1) <(zcat /users/mturchin/data/mturchin/Data/$iVal1/$iVal1.${j}.edits.txt.gz | grep -v pval | perl -slane 'srand($iSeed2); my $IncAllele; if ($F[3] > 0) { $IncAllele = $F[1]; } elsif ($F[3] < 0) { $IncAllele =$F[2]; } elsif ($F[3] == 0) { my $rand1 = rand(); if ($rand1 > .5) { $IncAllele = $F[1]; } elsif ($rand1 <= .5) { $IncAllele = $F[2]; } else { print STDERR "Error2a -- how did this happen?"; } } else { print STDERR "Error1a -- how did this happen?"; } print $F[0], "\t", $IncAllele;' -- -iSeed2=$iSeed1 | sort -k 1,1) | \
@@ -187,30 +185,25 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
 	done
 done
 
-1,2,3 4,5,6,7 Avg 9,10,11,12 
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/Loh2017
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/Neale2017
+mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/GIANT2014_5
 
-$HOME/data/mturchin/Data/Neale2017/Neale2017.Height.edits.txt.gz
-
-        zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | grep -v MAF | R -q -e "Data1 <- read.table(file('stdin'), header=F); EurMean <- apply(Data1[,c(4,7,10,13)], 1, function(x) { return(mean(x)); }); CEUDiff <- abs(Data1[,4] - EurMean); GBRDiff <- abs(Data1[,7] - EurMean); TSIDiff <- abs(Data1[,10] - EurMean); IBSDiff <- abs(Data1[,13] - EurMean); write.table(cbind(Data1[,c(1,2,3,4,7,10,13)], EurMean, CEUDiff, GBRDiff, TSIDiff, IBSDiff), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v \> | gzip > /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz
-
-(MultiEthnicGWAS) [  mturchin@login003  ~/LabMisc/RamachandranLab/ShiftAE]$zcat $HOME/data/mturchin/Data/Neale2017/Neale2017.Height.edits.txt.gz | head -n 10
-rsid    a1      a2      beta    se      pval
-rs13184706      C       T       -1.33660e-02    6.48300e-03     3.92375e-02
-rs115032754     C       T       1.06178e-03     6.29484e-03     8.66053e-01
-
-[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permPrep.AncAF_0.53
-.frq.gz | head -n 10
-rs1006610 T C 0.4697 0.544 0.514 0.5888 0.529125 0.0594250000000001 0.014875 0.0151250000000001 0.0596749999999999
-rs1007788 G C 0.4747 0.5165 0.5841 0.5374 0.528175 0.0534749999999999 0.011675 0.055925 0.00922500000000004
-rs1007993 A C 0.4747 0.5165 0.5841 0.5374 0.528175 0.0534749999999999 0.011675 0.055925 0.00922500000000004
-rs1041902 T A 0.4848 0.4835 0.5561 0.5841 0.527125 0.0423249999999999 0.043625 0.0289750000000001 0.056975
-(MultiEthnicGWAS) [  mturchin@login003  ~/LabMisc/RamachandranLab/ShiftAE]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | grep rs1006610
-rs1006610       T       C       0.4697  T       C       0.544   T       C       0.514   T       C       0.5888  T       C       0.6806  T       C       0.7121
-[  mturchin@node1149  ~]$zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.frq.gz | head -n 10
-SNP     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF     A1      A2      MAF
-rs1000039       T       G       0.0202  T       G       0.03846 T       G       0.03738 T       G       0.02804 T       G       0.1898  T       G       0.1667
-rs1000107       C       T       0.0303  C       T       0.01648 C       T       0.04206 C       T       0.04673 C       T       0.02315 C       T       0.01515
-
+for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
+	iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
+	for j in `cat <(echo "Height BMI" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do 
+		rm -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/$iVal1/*$j*; for chr1 in `echo {1..1}`; do
+		        echo $chr1
+	
+			if [ ! -d /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/$iVal1/$j ] ; then
+				mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/$iVal1/$j
+			fi
+	
+		        zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/$iVal1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${j}.Inc.frq.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); for (i in 1:10) { AncAF <- round(Data1[i,8], digits=2); write.table(Data1[i,], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/$iVal1/$j/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${j}.Inc.permPrep.AncAF_\", as.character(AncAF), \".frq\", sep=\"\"), append=TRUE, quote=FALSE, col.names=FALSE, row.names=FALSE);};"
+		
+		done; gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/$iVal1/$j/*$j*frq
+	done;
+done;
 
 
 
