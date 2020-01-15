@@ -197,26 +197,18 @@ ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicre
 ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt5eNeg8.bmass.GrdyClmp.rsIDs.gz
 ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
 
-#PROB FIX orient GWAS snp files to hghtInc allele?
 for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
-	for j in `cat <(echo "Height" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
-		for k in `cat <(echo "lt5eNeg9 lt1eNeg4 lt5eNeg8" | perl -lane 'print join("\n", @F);') | head -n 2 | tail -n 2`; do
-			echo $i $j $k
-			
-			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort -k 1,1)
-
-		done
-	done
-done
-
-
-for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
-	for j in `cat <(echo "Height" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
+	for j in `cat <(echo "Height BMI" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 		for k in `cat <(echo "lt5eNeg9 lt1eNeg4 lt5eNeg8" | perl -lane 'print join("\n", @F);') | head -n 2 | tail -n 2`; do
 			echo $i $j $k
 
-#			join <(zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
+##			join <(zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
 ##			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);"	
+			join <(zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/$i/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.${i}.${j}.Inc.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz
+
+ /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
+
+/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/$iVal1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${j}.Inc.frq.gz
 
 		done
 	done
