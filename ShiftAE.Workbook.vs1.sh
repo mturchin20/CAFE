@@ -149,7 +149,7 @@ mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBet
 ~	done
 ~done
 		
-for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
+for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 2`; do
 	iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
 	for j in `cat <(echo "Height BMI" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do 
 		for chr1 in `echo {1..22}`; do
@@ -168,7 +168,7 @@ mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFF
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/Neale2017
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/GIANT2014_5
 
-for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
+for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 2`; do
 	iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
 	for j in `cat <(echo "Height BMI" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do 
 		rm -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/$iVal1/$j/*$j*frq*; for chr1 in `echo {1..22}`; do
@@ -197,7 +197,7 @@ ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicre
 ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt5eNeg8.bmass.GrdyClmp.rsIDs.gz
 ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
 
-for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
+for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 2`; do
 	for j in `cat <(echo "Height BMI" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 		for k in `cat <(echo "lt5eNeg9 lt1eNeg4 lt5eNeg8" | perl -lane 'print join("\n", @F);') | head -n 2 | tail -n 2`; do
 			echo $i $j $k
@@ -205,11 +205,9 @@ for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\
 ##			join <(zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
 ##			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);"	
 			join <(zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/$i/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.${i}.${j}.Inc.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz
+#			zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(mean(Data1[,ncol(Data1)-5]) - Data1[,ncol(Data1)-5]), sum(mean(Data1[,ncol(Data1)-4]) - Data1[,ncol(Data1)-4]), sum(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3]), sum(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" 
 
- /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
-
-/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/$iVal1/CEUGBRTSIESNYRIESN.chr${chr1}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${j}.Inc.frq.gz
-
+				zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.$jVal1.Inc.$kVal1.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(mean(Data1[,ncol(Data1)-5]) - Data1[,ncol(Data1)-5]), sum(mean(Data1[,ncol(Data1)-4]) - Data1[,ncol(Data1)-4]), sum(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3]), sum(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.Inc.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
 		done
 	done
 done
@@ -217,11 +215,11 @@ done
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles
 
 #From: https://stackoverflow.com/questions/14904983/how-do-i-check-the-existence-of-a-local-file
-for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
+for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 2`; do
 	iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
 	for j in `cat <(echo "Height;5638 BMI;1456" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 		jVal1=`echo $j | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; jSeed1=`echo $j | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
-		for k in `cat <(echo "lt5eNeg9;2759 lt1eNeg4;78364 lt5eNeg8;3869" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
+		for k in `cat <(echo "lt5eNeg9;2759 lt1eNeg4;78364 lt5eNeg8;3869" | perl -lane 'print join("\n", @F);') | head -n 2 | tail -n 2`; do
 			kVal1=`echo $k | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; kSeed1=`echo $k | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
 			TotalSeed1=$((iSeed1+jSeed1+kSeed1));
 			echo $i $j $k $TotalSeed1
@@ -233,13 +231,13 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
 			fi
 
 			rm -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/*
-			zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$iVal1.$jVal1.$kVal1.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); \
-			for (i in 1:10) { \
+			zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$iVal1.$jVal1.$kVal1.bmass.GrdyClmp.rsIDs.w1000GInfo.${jVal1}.Inc.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); \
+			for (i in 1:nrow(Data1)) { \
 				AncAF <- round(as.numeric(as.character(Data1[i,8])), digits=2); Data2 <- c(); File3Count <- c(); for (j in c(-.01,0,.01)) { \
 		    Filename3 <- paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerAFFiles/$iVal1/$jVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${jVal1}.Inc.permPrep.AncAF_\", as.character(AncAF + j), \".frq.gz\", sep=\"\"); if (file.exists(Filename3)) { Data3 <- read.table(Filename3, header=F); Data2 <- rbind(Data2, Data3); File3Count <- c(File3Count, j); }; }; \
 				cat(c(i, as.numeric(as.character($TotalSeed1))+i, AncAF, paste(File3Count, collapse=\",\"), dim(Data2)), \"\n\", sep=\"\t\"); \ 
-				set.seed(as.numeric(as.character($TotalSeed1))+i); RowVals1 <- sample(1:nrow(Data2)); for (k in 1:20) { \
-						write.table(Data2[RowVals1[k],], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${jVal1}.Inc.$kVal1.perm\", as.character(k), \".txt\", sep=\"\"), append=TRUE, quote=FALSE, row.names=FALSE, col.names=FALSE); \
+				set.seed(as.numeric(as.character($TotalSeed1))+i); RowVals1 <- sample(1:nrow(Data2)); for (k in 1:1000) { \
+						write.table(Data2[RowVals1[k],], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.$jVal1.Inc.$kVal1.perm\", as.character(k), \".txt\", sep=\"\"), append=TRUE, quote=FALSE, row.names=FALSE, col.names=FALSE); \
 				}; \
 			};" | grep -v ^\> > /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.${jVal1}.Inc.$kVal1.permAll.Summary.txt
 			gzip -f /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/*
@@ -250,19 +248,22 @@ done
 
 ##mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/Analyses
 ##mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/Analyses/Perms
-mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms
+##mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms
+mkdir /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms
+						
+						write.table(Data2[RowVals1[k],], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.$jVal1.Inc.$kVal1.perm\", as.character(k), \".txt\", sep=\"\"), append=TRUE, quote=FALSE, row.names=FALSE, col.names=FALSE); \
 
-for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
+for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
         iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
         for j in `cat <(echo "Height;5638" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
                 jVal1=`echo $j | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; jSeed1=`echo $j | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
-                for k in `cat <(echo "lt5eNeg9;2759 lt1eNeg4;78364 lt5eNeg8;3869" | perl -lane 'print join("\n", @F);') | head -n 2 | tail -n 2`; do
+                for k in `cat <(echo "lt5eNeg9;2759 lt1eNeg4;78364 lt5eNeg8;3869" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
                         kVal1=`echo $k | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; kSeed1=`echo $k | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
                         TotalSeed1=$((iSeed1+jSeed1+kSeed1));
                         echo $i $j $k $TotalSeed1
 
-			rm -f /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt; for l in {1..20}; do
-				zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
+			rm -f /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.Inc.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt; for l in {1..20}; do
+				zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.$jVal1.Inc.$kVal1.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(mean(Data1[,ncol(Data1)-5]) - Data1[,ncol(Data1)-5]), sum(mean(Data1[,ncol(Data1)-4]) - Data1[,ncol(Data1)-4]), sum(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3]), sum(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.Inc.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
 			done 
 
                 done
@@ -270,6 +271,7 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
 done
 
 #				...Data1[,ncol(Data1)-3]), sd(Data1[,ncol(Data1)-2]), sd(Data1[,ncol(Data1)-1]), sd(Data1[,ncol(Data1)])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt 
+#				zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1.$jVal1.$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);"... 
 
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 3`; do
         iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
@@ -280,7 +282,7 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
                         TotalSeed1=$((iSeed1+jSeed1+kSeed1));
                         echo $i $j $k $TotalSeed1
 
-			cat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt | head -n 10
+			cat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt | head -n 10
 
                 done
         done
