@@ -24,8 +24,8 @@ R -q -e "library(\"workflowr\"); wflow_build();"
 #Updated naming convention from `CAFE` to `ShiftAE`
 
 
-#20190321
 #Vs1
+#20190321
 
 #Idea -- SNPs undergoing drift should randomly fluctuate to both higher and lower frequencies 'equally' (modulo population demographic misc) from their ancestral state over time. SNPs undergoing weak selective pressures in a given direction should experience less overall variance in their change in frequency since their ancestral state (alleles that are favored get pushed up; if you don't know orientation properly, can just use absolute difference since amount pushed up or amount pushed down are equivalent; looking at overall standard difference amongst 'AF change since ancestral state'; AF affects how much has changed since ancestral, but will be doing matched permutations on ancestral AF so within the final score, that's fine; the idea is that all alleles have similar changes in AF since ancestral state when they're being weakly selected, so they are more similar than random chance alone given a normal distribution variance)
 
@@ -197,20 +197,22 @@ ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicre
 ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt5eNeg8.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt5eNeg8.bmass.GrdyClmp.rsIDs.gz
 ln -s $HOME/data/mturchin/Data/GIANT2014_5/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.wUCSCGenomeBrowser_dbSNP130.vs1.lt1eNeg4.GrdyClmp.rsIDs.gz /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/GIANT2014_5.Height.lt1eNeg4.bmass.GrdyClmp.rsIDs.gz
 
-for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\n", @F);') | head -n 3 | tail -n 2`; do
+for i in `cat <(echo "Loh2017 Neale2017 GIANT2014_5" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 	for j in `cat <(echo "Height BMI" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
-		for k in `cat <(echo "lt5eNeg9 lt1eNeg4 lt5eNeg8" | perl -lane 'print join("\n", @F);') | head -n 2 | tail -n 2`; do
+		for k in `cat <(echo "lt5eNeg9 lt1eNeg4 lt5eNeg8" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
 			echo $i $j $k
 
 ##			join <(zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz
 ##			zcat /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), sum(abs(mean(Data1[,ncol(Data1)-1]) - Data1[,ncol(Data1)-1])), sum(abs(mean(Data1[,ncol(Data1)]) - Data1[,ncol(Data1)]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);"	
-			join <(zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/$i/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.${i}.${j}.Inc.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz
-#			zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(mean(Data1[,ncol(Data1)-5]) - Data1[,ncol(Data1)-5]), sum(mean(Data1[,ncol(Data1)-4]) - Data1[,ncol(Data1)-4]), sum(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3]), sum(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" 
+#			join <(zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.gz | sort) <(zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PerBetaFiles/$i/CEUGBRTSIESNYRIESN.chr*.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.${i}.${j}.Inc.frq.gz | sort -k 1,1) | gzip > /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz
+			zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(mean(Data1[,ncol(Data1)-5]), mean(Data1[,ncol(Data1)-4]), mean(Data1[,ncol(Data1)-3]), mean(Data1[,ncol(Data1)-2]), cor(Data1[,ncol(Data1)-5], Data1[,ncol(Data1)-4]), cor(Data1[,ncol(Data1)-3], Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);"
 
-				zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.$jVal1.Inc.$kVal1.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(mean(Data1[,ncol(Data1)-5]) - Data1[,ncol(Data1)-5]), sum(mean(Data1[,ncol(Data1)-4]) - Data1[,ncol(Data1)-4]), sum(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3]), sum(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.Inc.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
 		done
 	done
 done
+
+#			zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(abs(mean(Data1[,ncol(Data1)-5]) - Data1[,ncol(Data1)-5])), sum(abs(mean(Data1[,ncol(Data1)-4]) - Data1[,ncol(Data1)-4])), sum(abs(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3])), sum(abs(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2]))), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" 
+#			zcat /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Data/GWASsnps/$i.$j.$k.bmass.GrdyClmp.rsIDs.w1000GInfo.${j}.Inc.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(var(Data1[,ncol(Data1)-5]), var(Data1[,ncol(Data1)-4]), var(Data1[,ncol(Data1)-3]), var(Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);"
 
 mkdir /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles
 
@@ -251,8 +253,6 @@ done
 ##mkdir /users/mturchin/LabMisc/RamachandranLab/InterPath/ShiftAE/Vs1/Analyses/Perms
 mkdir /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms
 						
-						write.table(Data2[RowVals1[k],], file=paste(\"/users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.$jVal1.Inc.$kVal1.perm\", as.character(k), \".txt\", sep=\"\"), append=TRUE, quote=FALSE, row.names=FALSE, col.names=FALSE); \
-
 for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
         iVal1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[0];'`; iSeed1=`echo $i | perl -ane 'my @vals1 = split(/;/, $F[0]); print $vals1[1];'`;
         for j in `cat <(echo "Height;5638" | perl -lane 'print join("\n", @F);') | head -n 1 | tail -n 1`; do
@@ -263,7 +263,7 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
                         echo $i $j $k $TotalSeed1
 
 			rm -f /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.Inc.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt; for l in {1..20}; do
-				zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.$jVal1.Inc.$kVal1.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(sum(mean(Data1[,ncol(Data1)-5]) - Data1[,ncol(Data1)-5]), sum(mean(Data1[,ncol(Data1)-4]) - Data1[,ncol(Data1)-4]), sum(mean(Data1[,ncol(Data1)-3]) - Data1[,ncol(Data1)-3]), sum(mean(Data1[,ncol(Data1)-2]) - Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.Inc.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
+				zcat /users/mturchin/data/1000G/mturchin20/Analyses/ShiftAE/Vs1/SubFiles/PermFiles/$iVal1/$jVal1/$kVal1/CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.$iVal1.$jVal1.Inc.$kVal1.perm${l}.txt.gz | R -q -e "Data1 <- read.table(file('stdin'), header=F); write.table(matrix(c(mean(Data1[,ncol(Data1)-5]), mean(Data1[,ncol(Data1)-4]), mean(Data1[,ncol(Data1)-3]), mean(Data1[,ncol(Data1)-2])), nrow=1), quote=FALSE, col.names=FALSE, row.names=FALSE);" | grep -v ^\> >> /users/mturchin/LabMisc/RamachandranLab/ShiftAE/Vs1/Analyses/Perms/$iVal1.$jVal1.$kVal1.Inc.CEUGBRTSIESNYRIESN.chrAll.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.SNPs.noEURfix.edit.wMeanInfo.permAll.Results.txt
 			done 
 
                 done
@@ -288,6 +288,41 @@ for i in `cat <(echo "Loh2017;3169 Neale2017;9727 GIANT2014_5;27673" | perl -lan
         done
 done
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#SLiM Work
+#20200124
+
+#From http://benhaller.com/slim/SLiM_Manual.pdf, https://academic-oup-com.eres.qnl.qa/mbe/article/36/5/1101/5258474, https://github.com/elinck/SLiM_tutorial
+
+cd /users/mturchin/Software
+wget http://benhaller.com/slim/SLiM.zip
+unzip /users/mturchin/Software/SLiM.zip
+mkdir /users/mturchin/Software/SLiM/build
+cd /users/mturchin/Software/SLiM/build
+cmake ../.
+make
 
 
 
